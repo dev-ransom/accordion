@@ -1,47 +1,75 @@
-import React from "react";
+import React, { useState } from 'react'
 const faqs = [
   {
-    title: "Where are these chairs assembled?",
+    title: 'What is your Job description as a Frontend Developer ?',
     text:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusantium, quaerat temporibus quas dolore provident nisi ut aliquid ratione beatae sequi aspernatur veniam repellendus."
+      'Develop and maintain user-facing features for web applications.Collaborate with the design team to implement responsive and visually appealing interfaces..',
   },
   {
-    title: "How long do I have to return my chair?",
+    title: 'What is your total experience duration?',
     text:
-      "Pariatur recusandae dignissimos fuga voluptas unde optio nesciunt commodi beatae, explicabo natus."
+      'I bring one year of hands-on experience working with React and various JavaScript frameworks.',
   },
   {
-    title: "Do you ship to countries outside the EU?",
+    title: 'What is your current Job status?',
     text:
-      "Excepturi velit laborum, perspiciatis nemo perferendis reiciendis aliquam possimus dolor sed! Dolore laborum ducimus veritatis facere molestias!"
-  }
-];
+      'Working on myself and searching for an internship program open for frontend developers',
+  },
+]
 const App = () => {
   return (
-      <div>
-          <Accordion data={faqs} />
+    <div>
+      <Accordion data={faqs} />
     </div>
   )
 }
 
+export default App
 
-export default App;
-
-function Accordion({data}) {
-    return (
-        <div className="accordion">
-            {data.map((el, i) => <AccordionItem title={el.title} text={el.text} num={i}/>)}
-        </div>
-    )
+function Accordion({ data }) {
+  const [curOpen, setCurOpen] = useState(null)
+  return (
+    <div className="accordion">
+      {data.map((el, i) => (
+        <AccordionItem
+          title={el.title}
+          num={i}
+          key={el.title}
+          curOpen={curOpen}
+          onOpen={setCurOpen}
+        >
+          {el.text}
+        </AccordionItem>
+      ))}
+      <AccordionItem
+        title="Test 1"
+        num={22}
+        key="22"
+        curOpen={curOpen}
+        onOpen={setCurOpen}
+      >
+        <p>Allows React developers to:</p>
+        <ul>
+          <li>Break up UI into components</li>
+          <li>Make components reusuable</li>
+          <li>Place state efficiently</li>
+        </ul>
+      </AccordionItem>
+    </div>
+  )
 }
 
-function AccordionItem({num, title, text}) {
-    return (
-        <div className="item">
-            <p className="number">{num < 9 ? `0${num + 1}`: num + 1}</p>
-            <p className="title">{title}</p>
-            <p className="icon">-</p>
-            <div className="content-box">{text}</div>
-        </div>
-    )
+function AccordionItem({ num, title, curOpen, onOpen, children }) {
+  const isOpen = num === curOpen
+  function handleToggle() {
+    onOpen(num)
+  }
+  return (
+    <div className={`item ${isOpen ? 'open' : ''}`} onClick={handleToggle}>
+      <p className="number">{num < 9 ? `0${num + 1}` : num + 1}</p>
+      <p className="title">{title}</p>
+      <p className="icon">{isOpen ? '-' : '+'}</p>
+      {isOpen && <div className="content-box">{children}</div>}
+    </div>
+  )
 }
